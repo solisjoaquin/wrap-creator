@@ -82,11 +82,21 @@ export default function WrapStore() {
   };
 
   const handleItemToggle = (item: WrapItem) => {
-    setSelectedItems((prev) =>
-      prev.some((i) => i.id === item.id)
-        ? prev.filter((i) => i.id !== item.id)
-        : [...prev, item]
-    );
+    setSelectedItems((prev) => {
+      if (prev.some((i) => i.id === item.id)) {
+        return prev.filter((i) => i.id !== item.id);
+      } else {
+        if (toppings.some((t) => t.id === item.id)) {
+          const currentToppings = prev.filter((i) =>
+            toppings.some((t) => t.id === i.id)
+          );
+          if (currentToppings.length >= 2) {
+            return prev;
+          }
+        }
+        return [...prev, item];
+      }
+    });
   };
 
   const addToCart = () => {
@@ -118,21 +128,35 @@ export default function WrapStore() {
   const renderCheckboxGroup = (title: string, items: WrapItem[]) => (
     <div className="space-y-2">
       <h3 className="text-lg font-semibold">{title}</h3>
-      {items.map((item) => (
-        <div key={item.id} className="flex items-center space-x-2">
-          <Checkbox
-            id={item.id}
-            checked={selectedItems.some((i) => i.id === item.id)}
-            onCheckedChange={() => handleItemToggle(item)}
-          />
-          <Label htmlFor={item.id} className="flex-grow">
-            {item.name}
-          </Label>
-          <span className="text-sm text-muted-foreground">
-            ${item.price.toFixed(2)}
-          </span>
-        </div>
-      ))}
+      {items.map((item) => {
+        const isChecked = selectedItems.some((i) => i.id === item.id);
+        const isToppingMaxReached =
+          title === "Toppings" &&
+          selectedItems.filter((i) => toppings.some((t) => t.id === i.id))
+            .length >= 2 &&
+          !isChecked;
+        return (
+          <div key={item.id} className="flex items-center space-x-2">
+            <Checkbox
+              id={item.id}
+              checked={isChecked}
+              onCheckedChange={() => handleItemToggle(item)}
+              disabled={isToppingMaxReached}
+            />
+            <Label
+              htmlFor={item.id}
+              className={`flex-grow ${
+                isToppingMaxReached ? "text-muted-foreground" : ""
+              }`}
+            >
+              {item.name}
+            </Label>
+            <span className="text-sm text-muted-foreground">
+              ${item.price.toFixed(2)}
+            </span>
+          </div>
+        );
+      })}
     </div>
   );
 
