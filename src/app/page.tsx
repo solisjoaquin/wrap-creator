@@ -89,7 +89,7 @@ export default function WrapStore() {
           const currentToppings = prev.filter((i) =>
             toppings.some((t) => t.id === i.id)
           );
-          if (currentToppings.length >= 2) {
+          if (currentToppings.length >= 1) {
             return prev;
           }
         }
