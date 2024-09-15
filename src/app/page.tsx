@@ -19,41 +19,40 @@ import { AlertCircle, ShoppingCart, Send } from "lucide-react";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 const wrapTypes = [
-  { id: "meat", name: "Meat Wrap", price: 6.99 },
-  { id: "chicken", name: "Chicken Wrap", price: 6.49 },
-  { id: "vegan", name: "Vegan Wrap", price: 5.99 },
+  { id: "meat", name: "Wrap de Carne", price: 7000.0 },
+  { id: "chicken", name: "Wrap de Pollo", price: 7000.0 },
+  { id: "vegan", name: "Wrap Vegetariano", price: 6000.0 },
 ];
 
 const vegetables = [
-  { id: "lettuce", name: "Lettuce", price: 0.5 },
-  { id: "tomato", name: "Tomato", price: 0.5 },
-  { id: "cucumber", name: "Cucumber", price: 0.5 },
-  { id: "onion", name: "Onion", price: 0.5 },
-  { id: "bell-pepper", name: "Bell Pepper", price: 0.75 },
+  { id: "lettuce", name: "Lechuga", price: 0.0 },
+  { id: "tomato", name: "Tomate", price: 0.0 },
+  { id: "cucumber", name: "Repollo", price: 0.0 },
+  { id: "onion", name: "Cebolla", price: 0.0 },
+  { id: "bell-pepper", name: "Zanahoria", price: 0.0 },
 ];
 
 const toppings = [
-  { id: "cheese", name: "Cheese", price: 1 },
-  { id: "ham", name: "Ham", price: 1.5 },
-  { id: "chicken", name: "Grilled Chicken", price: 2 },
-  { id: "bacon", name: "Bacon", price: 1.5 },
-  { id: "egg", name: "Egg", price: 1 },
+  { id: "cheese", name: "Queso", price: 0.0 },
+  { id: "ham", name: "Jamon", price: 0.0 },
+  { id: "bacon", name: "Tocino", price: 0.0 },
+  { id: "egg", name: "Huevo", price: 0.0 },
 ];
 
 const sauces = [
-  { id: "mayo", name: "Mayonnaise", price: 0.5 },
-  { id: "mustard", name: "Mustard", price: 0.5 },
-  { id: "ketchup", name: "Ketchup", price: 0.5 },
-  { id: "ranch", name: "Ranch", price: 0.75 },
-  { id: "bbq", name: "BBQ Sauce", price: 0.75 },
+  { id: "mayo", name: "Mayonesa", price: 0.0 },
+  { id: "mustard", name: "Mostaza", price: 0.0 },
+  { id: "ketchup", name: "Ketchup", price: 0.0 },
+  { id: "ranch", name: "Albahaca", price: 0.0 },
+  { id: "bbq", name: "Ajo", price: 0.0 },
 ];
 
 const premiumOptions = [
-  { id: "avocado", name: "Avocado", price: 2 },
-  { id: "feta", name: "Feta Cheese", price: 1.5 },
-  { id: "sun-dried-tomato", name: "Sun-dried Tomato", price: 1.5 },
-  { id: "olives", name: "Kalamata Olives", price: 1 },
-  { id: "roasted-peppers", name: "Roasted Red Peppers", price: 1.5 },
+  { id: "avocado", name: "Palta", price: 500 },
+  { id: "feta", name: "Queso extra", price: 300 },
+  { id: "sun-dried-tomato", name: "Sun-dried Tomato", price: 300 },
+  { id: "olives", name: "Aceitunas", price: 500 },
+  { id: "roasted-peppers", name: "Roasted Red Peppers", price: 150 },
 ];
 
 type WrapItem = {
@@ -194,7 +193,9 @@ export default function WrapStore() {
         </Alert>
 
         <div className="mb-6">
-          <h3 className="text-lg font-semibold mb-2">Select Wrap Type</h3>
+          <h3 className="text-lg font-semibold mb-2">
+            Selecciona el tipo de wrap
+          </h3>
           <RadioGroup
             onValueChange={handleWrapTypeChange}
             value={selectedWrapType?.id}
@@ -217,14 +218,14 @@ export default function WrapStore() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <ScrollArea className="h-[400px] pr-4">
-            {renderCheckboxGroup("Vegetables", vegetables)}
+            {renderCheckboxGroup("Verduras", vegetables)}
             <Separator className="my-4" />
             {renderCheckboxGroup("Toppings", toppings)}
           </ScrollArea>
           <ScrollArea className="h-[400px] pr-4">
-            {renderCheckboxGroup("Sauces", sauces)}
+            {renderCheckboxGroup("Salsas", sauces)}
             <Separator className="my-4" />
-            {renderCheckboxGroup("Premium Options", premiumOptions)}
+            {renderCheckboxGroup("Extras", premiumOptions)}
           </ScrollArea>
         </div>
 
@@ -240,15 +241,15 @@ export default function WrapStore() {
             onClick={addToCart}
             disabled={!selectedWrapType || selectedItems.length === 0}
           >
-            <ShoppingCart className="mr-2 h-4 w-4" /> Add to Cart
+            <ShoppingCart className="mr-2 h-4 w-4" /> Agregar a la orden
           </Button>
         </div>
       </CardContent>
 
       <CardFooter className="flex flex-col items-start space-y-4 bg-muted/50 rounded-b-lg p-6">
-        <h3 className="text-xl font-semibold">Your Cart</h3>
+        <h3 className="text-xl font-semibold">Tu pedido</h3>
         {cart.length === 0 ? (
-          <p className="text-muted-foreground">Your cart is empty</p>
+          <p className="text-muted-foreground">No tienes nada en tu pedido</p>
         ) : (
           <ScrollArea className="w-full h-[300px]">
             {cart.map((wrap, index) => (
@@ -275,7 +276,7 @@ export default function WrapStore() {
                     size="sm"
                     onClick={() => removeFromCart(wrap.id)}
                   >
-                    Remove
+                    Eliminar
                   </Button>
                 </div>
               </div>
@@ -287,7 +288,7 @@ export default function WrapStore() {
             Total: ${cart.reduce((sum, wrap) => sum + wrap.total, 0).toFixed(2)}
           </div>
           <Button onClick={sendOrder} disabled={cart.length === 0}>
-            <Send className="mr-2 h-4 w-4" /> Send Order
+            <Send className="mr-2 h-4 w-4" /> Crear orden
           </Button>
         </div>
       </CardFooter>
